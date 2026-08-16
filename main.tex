@@ -1,0 +1,234 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+% -----------------------------------------------------
+% bvraghav-tiet-ucs503p-article.sty
+% -----------------------------------------------------
+
+% Variable: Lab Instructor
+\makeatletter \newcommand{\BvrSetLabInstructor}[1]{%
+  \gdef\Bvr@LabInstructor{#1}}
+% default
+\newcommand{\Bvr@LabInstructor}{Paramveer Sidhu}
+% public accessor
+\newcommand{\BvrLabInstructorValue}{\Bvr@LabInstructor}
+\makeatother
+
+% Add subtitle
+\usepackage{titling}
+% -- Set title bold
+\pretitle{\begin{center}\bfseries\fontsize{18bp}{18bp}\selectfont}
+\makeatletter
+\newcommand{\BvrSubtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip 0.5em}%
+}
+\makeatother
+
+% Hints in the section title(s)
+\newcommand{\BvrHint}[1]{%
+  {\normalfont\normalsize\itshape\hfill #1}}
+
+% -----------------------------------------------------
+
+\title{LabGuard: An Environmental Drift and Storage Monitoring System}
+
+\BvrSetLabInstructor{Paramveer Sidhu}
+
+\BvrSubtitle{%
+  Project Proposal for UCS503P  \\
+  Submitted to: \BvrLabInstructorValue \\ \bfseries
+  Thapar Institute of Engineering and Technology% 
+}
+
+\author{
+  Aditi Sinha, CSED%
+  \thanks{Roll No: \texttt{1024030xxx}, %
+    Email: \texttt{asinha\_be24\@thapar.edu}}
+  \and 
+  Sajneet Kaur Grewal, CSED%
+  \thanks{Roll No: \texttt{1024030xxx}, %
+    Email: \texttt{sgrewal\_be24\@thapar.edu}}
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Higher-order goal%
+  \BvrHint{\ldots secondary framing}}
+This project aims to improve research reproducibility, lab safety, and asset integrity in university facilities by preventing sample and reagent degradation. While environmental monitoring is applicable across industrial facilities, the immediate engineering objective is to translate \emph{continuous compliance and drift alerting} into a measurable, lightweight, and deployable software pipeline.
+
+\section{Time-to-value %
+\BvrHint{\ldots primary heuristic}}
+\begin{itemize}[leftmargin=0.7cm]
+    \item We will deliver meaningful increments quickly by prototyping the core ingestion and violation-checking workflow within a 2-week iteration window.
+    \item We will prioritize fast feedback over complex infrastructure by using weekly iteration cycles and automated CI testing to catch defects early.
+    \item Success is defined by what can be ingested, validated, and visually flagged in the first iteration, and incrementally expanded thereafter.
+\end{itemize}
+
+\section{Problem Statement}
+In campus research laboratories and department storerooms, temperature-sensitive chemical reagents, biological cultures, and ongoing experiments often suffer irreversible damage due to undetected environmental drift (e.g., refrigeration failure, door ajar, HVAC anomalies). Common pain points include:
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{Manual and sporadic logging:} measurements are often recorded on physical paper logs once a day, missing rapid transient failures.
+    \item \textbf{Delayed incident visibility:} lab technicians discover spoilage or condition violations only after experiments fail or samples degrade.
+    \item \textbf{Absence of centralized thresholds:} different storage units require distinct tolerance bounds, leading to operator error.
+    \item \textbf{Lack of audit trails:} no queryable history exists to prove whether an experiment remained within compliance specifications.
+\end{itemize}
+
+\textbf{Why this matters now (contextual relevance):} In academic research laboratories with high sample turnover and shared equipment, automated condition monitoring prevents costly material loss, saves experiment runtime, and reduces hazardous chemical degradation.
+
+\section{Proposed Solution %
+\BvrHint{\ldots Software Proposition}}
+\subsection{Overview}
+Build a \textbf{web-based} ``Lab Environmental Monitoring'' platform with the following components:
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{Telemetry ingestion API:} accepts periodic sensor payloads (sensor ID, temperature, humidity, timestamp).
+    \item \textbf{Deterministic rule evaluator:} automatically checks incoming readings against unit-specific minimum/maximum threshold boundaries.
+    \item \textbf{Live monitor dashboard:} displays active storage unit health status with clear visual badges (Safe vs. Warning/Alert).
+    \item \textbf{Historical log viewer:} visualizes recent reading trends to spot gradual thermal or humidity drift.
+    \item \textbf{Incident logging:} automatically records timestamped threshold breaches for compliance auditing.
+\end{itemize}
+
+\subsection{Core workflow}
+\begin{enumerate}[leftmargin=0.7cm]
+    \item Edge sensor (or test simulation script) sends an HTTP payload to the ingestion endpoint.
+    \item Backend validates payload structure and compares values against configured threshold envelopes.
+    \item Reading is persisted in the database alongside its evaluated status (``SAFE'' or ``ALERT'').
+    \item Dashboard updates to reflect live status, rendering immediate visual warnings if a threshold is breached.
+\end{enumerate}
+
+\subsection{Operational constraints for an educational, campus setting}
+\begin{itemize}[leftmargin=0.7cm]
+    \item Keep the system lightweight and responsive on standard desktop/mobile browsers.
+    \item Avoid reliance on complex machine learning or distributed stream engines; focus on deterministic correctness, automated testing, and clear workflow transitions.
+    \item Design for straightforward deployment using standard relational storage and basic cloud/local hosting.
+\end{itemize}
+
+\section{Solution Approach %
+\BvrHint{\ldots Engineering focus}}
+This is an engineering course project, so we focus on software correctness, data integrity, and pipeline automation rather than experimental algorithms.
+
+\subsection{Threshold evaluation %
+\BvrHint{\ldots non-research}}
+Threshold checking will be deterministic and rule-based:
+\begin{itemize}[leftmargin=0.7cm]
+    \item Standardize payload structures with strict data type validation (numeric bounds, non-null values).
+    \item Evaluate readings using standard boundary comparison logic based on material safety tolerance tables.
+    \item Classify readings into distinct states (Normal, Warning, Critical) without black-box models.
+\end{itemize}
+
+\subsection{Web architecture %
+\BvrHint{\ldots web-based solution}}
+A standard 3-tier web architecture:
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{Frontend:} responsive web dashboard to view live storage unit statuses, history charts, and alerts.
+    \item \textbf{Backend API:} REST endpoints for telemetry ingestion, threshold configuration, and log retrieval.
+    \item \textbf{Database:} relational database (SQLite/PostgreSQL) storing sensor metadata, threshold definitions, telemetry logs, and incident records.
+\end{itemize}
+
+\subsection{CI/CD and fast delivery enabler}
+CI/CD will be used to:
+\begin{itemize}[leftmargin=0.7cm]
+    \item Automatically run unit tests verifying threshold arithmetic, input validation, and boundary conditions on every push.
+    \item Ensure payload schema regressions are caught before merging to the main branch.
+    \item Automate packaging and deployment to a staging environment.
+\end{itemize}
+
+\section{Evaluation Criterion %
+\BvrHint{\ldots measurable and attributable}}
+We define success using measurable metrics tied to the core workflow.
+
+\subsection{Primary evaluation metric}
+\textbf{Alert Trigger Latency (ATL):} time elapsed between the receipt of an out-of-bounds telemetry payload and the generation of an alert state in the system.
+\begin{itemize}[leftmargin=0.7cm]
+    \item Target: median ATL $\le$ 1 second during pilot testing.
+    \item Attribution: measured from payload receipt timestamp to alert record commit timestamp in the database.
+\end{itemize}
+
+\subsection{Secondary evaluation metrics}
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{Boundary evaluation accuracy:} 100\% deterministic accuracy on test suites covering edge cases ($T = T_{\text{max}}$, $T > T_{\text{max}}$, and invalid input types).
+    \item \textbf{Input rejection rate:} 100\% clean rejection (HTTP 400) of malformed payloads without server crashes.
+    \item \textbf{UI status freshness:} live dashboard status reflection within 2 seconds of new telemetry ingestion.
+    \item \textbf{Pipeline reliability:} $\ge$ 99\% test suite pass rate in CI prior to release.
+\end{itemize}
+
+\subsection{Pilot validation plan %
+\BvrHint{\ldots high-level}}
+\begin{itemize}[leftmargin=0.7cm]
+    \item Run automated telemetry simulation scripts replicating normal operating conditions and simulated refrigeration failure spikes.
+    \item Validate with 2--3 lab student scenarios (setting thresholds for cold storage vs. ambient chemical cabinets) and evaluate clarity of visual alerts.
+\end{itemize}
+
+\section{Scalability %
+\BvrHint{\ldots with foresight}}
+The proposition is designed to scale systematically in both theoretical and practical dimensions.
+
+\begin{enumerate}[leftmargin=0.7cm]
+    \item \textbf{Scalable (theoretically):} The system supports scaling to multiple campus departments and units by:
+    \begin{itemize}[leftmargin=0.7cm]
+        \item decoupling telemetry ingestion endpoints from dashboard presentation layers,
+        \item applying database indexing on timestamp and sensor ID fields for fast time-series queries,
+        \item utilizing stateless API design for concurrent request handling.
+    \end{itemize}
+    
+    \item \textbf{Operationally deployable (practically):} The system runs reliably on standard infrastructure:
+    \begin{itemize}[leftmargin=0.7cm]
+        \item relational database backing,
+        \item containerized packaging for consistent execution across environments,
+        \item GitHub Actions CI pipeline for automated testing and continuous integration.
+    \end{itemize}
+\end{enumerate}
+
+\section{Engine availability heuristic}
+A mature set of software components is available to implement this without research bottlenecks:
+\begin{itemize}[leftmargin=0.7cm]
+    \item Web frameworks for REST APIs (e.g., FastAPI, Express.js).
+    \item Standard relational database (e.g., PostgreSQL, SQLite).
+    \item Frontend rendering and visualization libraries (e.g., React, Chart.js).
+    \item Automated testing frameworks (e.g., Pytest, Jest).
+    \item CI runner (e.g., GitHub Actions) for automated test execution.
+\end{itemize}
+These mature tools enable the team to focus on input reliability, deterministic testing, and clear UX rather than low-level infrastructure development.
+
+\section{Project scope and deliverables %
+\BvrHint{\ldots iteration-friendly}}
+\subsection{Initial deliverable %
+\BvrHint{\ldots first iteration}}
+\begin{itemize}[leftmargin=0.7cm]
+    \item Ingestion endpoint (\texttt{POST /api/telemetry}) with basic schema validation
+    \item Deterministic threshold comparison logic for incoming values
+    \item Single-table relational schema storing readings and alert flags
+    \item Basic frontend status view displaying latest sensor reading and a Safe/Alert indicator
+    \item CI pipeline: automated linting and unit tests verifying threshold arithmetic
+\end{itemize}
+
+\subsection{Subsequent deliverables}
+\begin{itemize}[leftmargin=0.7cm]
+    \item Interactive historical trend chart for temperature and humidity
+    \item Configuration UI to define custom Min/Max thresholds per sensor unit
+    \item Automated simulation script generating periodic test traffic and anomaly spikes
+    \item Outbound notification integration (email/webhook) for critical alerts
+    \item CSV export for historical compliance audit records
+\end{itemize}
+
+\section{Risks and mitigations}
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{Malformed sensor data:} implement strict schema validation and type checking at the API boundary to reject bad inputs safely.
+    \item \textbf{False positive alarms from transient sensor noise:} enforce configurable tolerance windows (e.g., requiring 2 consecutive out-of-bound readings) in subsequent iterations.
+    \item \textbf{Evaluation measurement ambiguity:} instrument explicit timestamps on ingestion and persistence to clearly measure alert trigger latency.
+    \item \textbf{Scope creep:} maintain a strict separation between core telemetry workflows and optional notification integrations.
+\end{itemize}
+
+\section{Summary}
+This project proposes a lightweight, deployable web platform to monitor environmental parameters and prevent reagent degradation in campus laboratories. It meets the course criteria by emphasizing rapid delivery through a functional 2-week MVP, using CI automation to ensure threshold evaluation correctness, and tracking measurable performance metrics (alert trigger latency and boundary evaluation accuracy). It maintains a strict engineering focus on workflow robustness and reliability rather than unproven experimental algorithms.
+
+\end{document}
