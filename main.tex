@@ -37,7 +37,7 @@
 
 % -----------------------------------------------------
 
-\title{LabGuard: An Environmental Drift and Storage Monitoring System}
+\title{MindPulse: A Privacy-First Multimodal Cognitive Fatigue and Burnout Monitoring Pipeline}
 
 \BvrSetLabInstructor{Paramveer Sidhu}
 
@@ -48,12 +48,12 @@
 }
 
 \author{
-  Aditi Sinha, CSED%
-  \thanks{Roll No: \texttt{1024030xxx}, %
+  Aditi Sinha, 3C11%
+  \thanks{Roll No: \texttt{1024030024}, %
     Email: \texttt{asinha\_be24\@thapar.edu}}
   \and 
-  Sajneet Kaur Grewal, CSED%
-  \thanks{Roll No: \texttt{1024030xxx}, %
+  Sajneet Kaur Grewal, 3C11%
+  \thanks{Roll No: \texttt{1024030016}, %
     Email: \texttt{sgrewal\_be24\@thapar.edu}}
 }
 
@@ -64,82 +64,83 @@
 
 \section{Higher-order goal%
   \BvrHint{\ldots secondary framing}}
-This project aims to improve research reproducibility, lab safety, and asset integrity in university facilities by preventing sample and reagent degradation. While environmental monitoring is applicable across industrial facilities, the immediate engineering objective is to translate \emph{continuous compliance and drift alerting} into a measurable, lightweight, and deployable software pipeline.
+This project aims to enhance student and developer wellness by reducing cognitive exhaustion and screen-induced burnout. While workplace fatigue is a widespread behavioral issue, the immediate engineering objective is to translate \emph{passive fatigue detection and recovery scheduling} into a measurable, lightweight, and deployable software pipeline.
 
 \section{Time-to-value %
 \BvrHint{\ldots primary heuristic}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item We will deliver meaningful increments quickly by prototyping the core ingestion and violation-checking workflow within a 2-week iteration window.
-    \item We will prioritize fast feedback over complex infrastructure by using weekly iteration cycles and automated CI testing to catch defects early.
-    \item Success is defined by what can be ingested, validated, and visually flagged in the first iteration, and incrementally expanded thereafter.
+    \item We will deliver meaningful increments quickly by prototyping the core session-logging and fatigue-scoring pipeline within a 2-week iteration window.
+    \item We will prioritize fast feedback over custom model research by using pre-trained feature extractors and weekly CI-driven automated test releases.
+    \item Success is defined by what can be scored, logged, and visualized in the first iteration, and incrementally expanded with multimodal inputs thereafter.
 \end{itemize}
 
 \section{Problem Statement}
-In campus research laboratories and department storerooms, temperature-sensitive chemical reagents, biological cultures, and ongoing experiments often suffer irreversible damage due to undetected environmental drift (e.g., refrigeration failure, door ajar, HVAC anomalies). Common pain points include:
+University students and knowledge workers experience severe productivity drops and digital fatigue during prolonged, uninterrupted screen sessions. Common pain points include:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Manual and sporadic logging:} measurements are often recorded on physical paper logs once a day, missing rapid transient failures.
-    \item \textbf{Delayed incident visibility:} lab technicians discover spoilage or condition violations only after experiments fail or samples degrade.
-    \item \textbf{Absence of centralized thresholds:} different storage units require distinct tolerance bounds, leading to operator error.
-    \item \textbf{Lack of audit trails:} no queryable history exists to prove whether an experiment remained within compliance specifications.
+    \item \textbf{Delayed self-awareness:} users rarely recognize cognitive saturation until headaches, attention lapses, or coding blunders occur.
+    \item \textbf{Intrusive monitoring:} existing surveillance tools record invasive video feeds or keystrokes, raising severe privacy concerns.
+    \item \textbf{Lack of actionable recovery loops:} traditional wellness tools provide static reminders rather than contextual break recommendations based on session strain.
+    \item \textbf{No verifiable audit of session load:} users cannot correlate long study/work sprints with declining focus over time.
 \end{itemize}
 
-\textbf{Why this matters now (contextual relevance):} In academic research laboratories with high sample turnover and shared equipment, automated condition monitoring prevents costly material loss, saves experiment runtime, and reduces hazardous chemical degradation.
+\textbf{Why this matters now (contextual relevance):} In remote learning and intensive engineering environments, a non-invasive, privacy-preserving fatigue sentinel prevents burnout and sustains long-term academic productivity.
 
 \section{Proposed Solution %
 \BvrHint{\ldots Software Proposition}}
 \subsection{Overview}
-Build a \textbf{web-based} ``Lab Environmental Monitoring'' platform with the following components:
+Build a \textbf{web-based} ``Cognitive Fatigue Sentinel'' platform with the following components:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Telemetry ingestion API:} accepts periodic sensor payloads (sensor ID, temperature, humidity, timestamp).
-    \item \textbf{Deterministic rule evaluator:} automatically checks incoming readings against unit-specific minimum/maximum threshold boundaries.
-    \item \textbf{Live monitor dashboard:} displays active storage unit health status with clear visual badges (Safe vs. Warning/Alert).
-    \item \textbf{Historical log viewer:} visualizes recent reading trends to spot gradual thermal or humidity drift.
-    \item \textbf{Incident logging:} automatically records timestamped threshold breaches for compliance auditing.
+    \item \textbf{Client-side telemetry collector:} processes lightweight, on-device metrics (eye blink rate/EAR via webcam and typing cadence rhythm) without uploading raw media to servers.
+    \item \textbf{Self-reported strain pulse:} quick 2-click micro-survey capturing subjective focus level.
+    \item \textbf{Deterministic composite scoring engine:} combines real-time session duration, micro-survey inputs, and edge blink metrics into an actionable Fatigue Index ($0$--$100$).
+    \item \textbf{Live wellness dashboard:} displays current strain tier (Optimal, Moderate, Fatigued) and smart recovery countdowns.
+    \item \textbf{Smart intervention trigger:} automated break prompts and micro-recovery exercises dispatched upon threshold violations.
 \end{itemize}
 
 \subsection{Core workflow}
 \begin{enumerate}[leftmargin=0.7cm]
-    \item Edge sensor (or test simulation script) sends an HTTP payload to the ingestion endpoint.
-    \item Backend validates payload structure and compares values against configured threshold envelopes.
-    \item Reading is persisted in the database alongside its evaluated status (``SAFE'' or ``ALERT'').
-    \item Dashboard updates to reflect live status, rendering immediate visual warnings if a threshold is breached.
+    \item User starts a work/study session via the web dashboard.
+    \item Browser extracts local blink rate telemetry via client-side libraries and logs session interval metrics.
+    \item Ingestion API consumes structured numerical telemetry payloads (no raw video or text stored).
+    \item Rule engine computes the composite Fatigue Index and flags threshold breaches.
+    \item Dashboard alerts user when fatigue levels exceed safe thresholds and recommends specific recovery intervals.
 \end{enumerate}
 
 \subsection{Operational constraints for an educational, campus setting}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Keep the system lightweight and responsive on standard desktop/mobile browsers.
-    \item Avoid reliance on complex machine learning or distributed stream engines; focus on deterministic correctness, automated testing, and clear workflow transitions.
-    \item Design for straightforward deployment using standard relational storage and basic cloud/local hosting.
+    \item Ensure zero raw video or keystroke content leaves the user's local browser to preserve complete privacy.
+    \item Avoid building deep neural networks from scratch; rely on mature client-side vision primitives and deterministic scoring heuristics.
+    \item Design for low CPU utilization so background monitoring does not degrade system performance.
 \end{itemize}
 
 \section{Solution Approach %
 \BvrHint{\ldots Engineering focus}}
-This is an engineering course project, so we focus on software correctness, data integrity, and pipeline automation rather than experimental algorithms.
+This is an engineering course project, so we focus on data pipelines, client-side efficiency, and automated testing rather than novel algorithmic research.
 
-\subsection{Threshold evaluation %
+\subsection{Fatigue scoring heuristics %
 \BvrHint{\ldots non-research}}
-Threshold checking will be deterministic and rule-based:
+Fatigue evaluation will be deterministic and rule-weighted:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Standardize payload structures with strict data type validation (numeric bounds, non-null values).
-    \item Evaluate readings using standard boundary comparison logic based on material safety tolerance tables.
-    \item Classify readings into distinct states (Normal, Warning, Critical) without black-box models.
+    \item Use pre-trained client-side landmark extractors (e.g., MediaPipe FaceMesh) to derive Eye Aspect Ratio (EAR) locally.
+    \item Calculate weighted score vectors across session duration, blink frequency drop, and self-reported focus markers.
+    \item Maintain deterministic boundary thresholds (e.g., Score $> 75 \rightarrow$ High Fatigue) for predictable testing.
 \end{itemize}
 
 \subsection{Web architecture %
 \BvrHint{\ldots web-based solution}}
 A standard 3-tier web architecture:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} responsive web dashboard to view live storage unit statuses, history charts, and alerts.
-    \item \textbf{Backend API:} REST endpoints for telemetry ingestion, threshold configuration, and log retrieval.
-    \item \textbf{Database:} relational database (SQLite/PostgreSQL) storing sensor metadata, threshold definitions, telemetry logs, and incident records.
+    \item \textbf{Frontend:} responsive single-page web app with client-side vision extraction and live charting.
+    \item \textbf{Backend API:} REST endpoints for ingesting numerical telemetry records, user sessions, and threshold alerts.
+    \item \textbf{Database:} relational database (SQLite/PostgreSQL) storing session timestamps, fatigue scores, and recovery logs.
 \end{itemize}
 
 \subsection{CI/CD and fast delivery enabler}
 CI/CD will be used to:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Automatically run unit tests verifying threshold arithmetic, input validation, and boundary conditions on every push.
-    \item Ensure payload schema regressions are caught before merging to the main branch.
-    \item Automate packaging and deployment to a staging environment.
+    \item Automatically run unit test suites on score-weighting algorithms and schema validation on every git push.
+    \item Verify that invalid or negative telemetry values are rejected cleanly.
+    \item Deploy verified builds to cloud staging environments automatically.
 \end{itemize}
 
 \section{Evaluation Criterion %
@@ -147,88 +148,88 @@ CI/CD will be used to:
 We define success using measurable metrics tied to the core workflow.
 
 \subsection{Primary evaluation metric}
-\textbf{Alert Trigger Latency (ATL):} time elapsed between the receipt of an out-of-bounds telemetry payload and the generation of an alert state in the system.
+\textbf{Intervention Trigger Latency (ITL):} time between telemetry ingestion crossing a fatigue threshold and the dispatch of a recovery notification.
 \begin{itemize}[leftmargin=0.7cm]
-    \item Target: median ATL $\le$ 1 second during pilot testing.
-    \item Attribution: measured from payload receipt timestamp to alert record commit timestamp in the database.
+    \item Target: median ITL $\le$ 1.5 seconds during active monitoring sessions.
+    \item Attribution: measured from payload receipt timestamp to alert dispatch log in the database.
 \end{itemize}
 
 \subsection{Secondary evaluation metrics}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Boundary evaluation accuracy:} 100\% deterministic accuracy on test suites covering edge cases ($T = T_{\text{max}}$, $T > T_{\text{max}}$, and invalid input types).
-    \item \textbf{Input rejection rate:} 100\% clean rejection (HTTP 400) of malformed payloads without server crashes.
-    \item \textbf{UI status freshness:} live dashboard status reflection within 2 seconds of new telemetry ingestion.
-    \item \textbf{Pipeline reliability:} $\ge$ 99\% test suite pass rate in CI prior to release.
+    \item \textbf{Deterministic scoring accuracy:} 100\% pass rate on edge-case test suites (verifying correct state transitions at boundary scores 50, 75, 90).
+    \item \textbf{Data efficiency:} telemetry payload sizes restricted to $< 2\text{ KB}$ per ping to maintain lightweight operation.
+    \item \textbf{Client execution overhead:} client-side feature extraction consuming $< 5\%$ average CPU on standard laptops.
+    \item \textbf{Pipeline reliability:} $\ge$ 99\% CI test pass rate prior to release.
 \end{itemize}
 
 \subsection{Pilot validation plan %
 \BvrHint{\ldots high-level}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Run automated telemetry simulation scripts replicating normal operating conditions and simulated refrigeration failure spikes.
-    \item Validate with 2--3 lab student scenarios (setting thresholds for cold storage vs. ambient chemical cabinets) and evaluate clarity of visual alerts.
+    \item Run automated mock telemetry scripts simulating 2-hour continuous study sessions with escalating fatigue patterns.
+    \item Conduct user testing with 10 student volunteers across 1-hour study blocks to evaluate alert timeliness and UI clarity.
 \end{itemize}
 
 \section{Scalability %
 \BvrHint{\ldots with foresight}}
-The proposition is designed to scale systematically in both theoretical and practical dimensions.
+The architecture is designed to scale across multiple users and institutions.
 
 \begin{enumerate}[leftmargin=0.7cm]
-    \item \textbf{Scalable (theoretically):} The system supports scaling to multiple campus departments and units by:
+    \item \textbf{Scalable (theoretically):} The system handles high concurrent user loads by:
     \begin{itemize}[leftmargin=0.7cm]
-        \item decoupling telemetry ingestion endpoints from dashboard presentation layers,
-        \item applying database indexing on timestamp and sensor ID fields for fast time-series queries,
-        \item utilizing stateless API design for concurrent request handling.
+        \item delegating all visual/computational extraction to client browsers,
+        \item keeping backend APIs stateless and lightweight (processing only numerical scores),
+        \item indexing database records on session IDs and timestamps for instant history querying.
     \end{itemize}
     
-    \item \textbf{Operationally deployable (practically):} The system runs reliably on standard infrastructure:
+    \item \textbf{Operationally deployable (practically):} The system runs reliably on common infrastructure:
     \begin{itemize}[leftmargin=0.7cm]
-        \item relational database backing,
-        \item containerized packaging for consistent execution across environments,
-        \item GitHub Actions CI pipeline for automated testing and continuous integration.
+        \item managed relational database,
+        \item lightweight containerized deployment (Docker),
+        \item automated GitHub Actions pipeline for continuous integration and testing.
     \end{itemize}
 \end{enumerate}
 
 \section{Engine availability heuristic}
-A mature set of software components is available to implement this without research bottlenecks:
+A mature set of stable libraries is available to implement this without research delays:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Web frameworks for REST APIs (e.g., FastAPI, Express.js).
-    \item Standard relational database (e.g., PostgreSQL, SQLite).
-    \item Frontend rendering and visualization libraries (e.g., React, Chart.js).
-    \item Automated testing frameworks (e.g., Pytest, Jest).
-    \item CI runner (e.g., GitHub Actions) for automated test execution.
+    \item Client-side vision primitives (MediaPipe / FaceMesh via JavaScript).
+    \item Backend REST API framework (FastAPI or Express.js).
+    \item Relational database engine (SQLite for dev, PostgreSQL for staging).
+    \item Dashboard charting engines (Chart.js / Recharts).
+    \item Test runner and CI engine (Pytest / Jest and GitHub Actions).
 \end{itemize}
-These mature tools enable the team to focus on input reliability, deterministic testing, and clear UX rather than low-level infrastructure development.
+These mature tools enable the team to focus on input reliability, privacy guarantees, and UX rather than custom machine learning model training.
 
 \section{Project scope and deliverables %
 \BvrHint{\ldots iteration-friendly}}
 \subsection{Initial deliverable %
 \BvrHint{\ldots first iteration}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Ingestion endpoint (\texttt{POST /api/telemetry}) with basic schema validation
-    \item Deterministic threshold comparison logic for incoming values
-    \item Single-table relational schema storing readings and alert flags
-    \item Basic frontend status view displaying latest sensor reading and a Safe/Alert indicator
-    \item CI pipeline: automated linting and unit tests verifying threshold arithmetic
+    \item Telemetry ingestion endpoint (\texttt{POST /api/fatigue}) with strict schema validation
+    \item Deterministic scoring engine computing fatigue index from basic inputs (session duration + micro-survey)
+    \item Database schema storing user session records and calculated scores
+    \item Web dashboard displaying active session status with a Safe/Fatigued visual indicator
+    \item CI pipeline: automated linting and unit tests verifying score calculation logic
 \end{itemize}
 
 \subsection{Subsequent deliverables}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Interactive historical trend chart for temperature and humidity
-    \item Configuration UI to define custom Min/Max thresholds per sensor unit
-    \item Automated simulation script generating periodic test traffic and anomaly spikes
-    \item Outbound notification integration (email/webhook) for critical alerts
-    \item CSV export for historical compliance audit records
+    \item Client-side eye aspect ratio (EAR) integration via MediaPipe for passive blink tracking
+    \item Historical session analytics showing focus and fatigue trends over time
+    \item Interactive break scheduler with micro-recovery guidance prompts
+    \item Automated synthetic data generator for stress-testing pipeline edge cases
+    \item CSV/PDF session report export for personal habit tracking
 \end{itemize}
 
 \section{Risks and mitigations}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Malformed sensor data:} implement strict schema validation and type checking at the API boundary to reject bad inputs safely.
-    \item \textbf{False positive alarms from transient sensor noise:} enforce configurable tolerance windows (e.g., requiring 2 consecutive out-of-bound readings) in subsequent iterations.
-    \item \textbf{Evaluation measurement ambiguity:} instrument explicit timestamps on ingestion and persistence to clearly measure alert trigger latency.
-    \item \textbf{Scope creep:} maintain a strict separation between core telemetry workflows and optional notification integrations.
+    \item \textbf{User privacy concerns:} guarantee that no video frames, images, or raw text are transmitted or stored; only derived numerical metrics are sent to the backend.
+    \item \textbf{Camera lighting sensitivity:} allow the system to gracefully fall back on session duration and survey inputs if optical conditions are poor.
+    \item \textbf{Alert fatigue:} introduce cooldown timers to prevent repeated notifications within short time windows.
+    \item \textbf{Evaluation measurement ambiguity:} use automated server timestamps to strictly measure alert response latencies.
 \end{itemize}
 
 \section{Summary}
-This project proposes a lightweight, deployable web platform to monitor environmental parameters and prevent reagent degradation in campus laboratories. It meets the course criteria by emphasizing rapid delivery through a functional 2-week MVP, using CI automation to ensure threshold evaluation correctness, and tracking measurable performance metrics (alert trigger latency and boundary evaluation accuracy). It maintains a strict engineering focus on workflow robustness and reliability rather than unproven experimental algorithms.
+This project proposes MindPulse, a privacy-preserving web platform designed to detect cognitive fatigue and recommend timely recovery breaks during extended computer work. It meets the course criteria by delivering a functional 2-week MVP, using CI automation to guarantee calculation correctness, and leveraging mature client-side engines to bypass model training bottlenecks. It focuses on engineering reliability, data privacy, and measurable intervention latency.
 
 \end{document}
