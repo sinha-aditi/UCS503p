@@ -37,7 +37,7 @@
 
 % -----------------------------------------------------
 
-\title{MindPulse: A Privacy-First Multimodal Cognitive Fatigue and Burnout Monitoring Pipeline}
+\title{StressSense: A Web-Based Multi-Modal Stress Detection and Wellness Platform}
 
 \BvrSetLabInstructor{Paramveer Sidhu}
 
@@ -48,188 +48,193 @@
 }
 
 \author{
-  Aditi Sinha, 3C11%
-  \thanks{Roll No: \texttt{1024030024}, %
-    Email: \texttt{asinha\_be24\@thapar.edu}}
-  \and 
   Sajneet Kaur Grewal, 3C11%
   \thanks{Roll No: \texttt{1024030016}, %
     Email: \texttt{sgrewal\_be24\@thapar.edu}}
+  \and 
+  Aditi Sinha, 3C11%
+  \thanks{Roll No: \texttt{1024030024}, %
+    Email: \texttt{asinha\_be24\@thapar.edu}}
 }
 
-\date{\today}
+\date{August 17, 2026}
 
 \begin{document}
 \maketitle
 
 \section{Higher-order goal%
   \BvrHint{\ldots secondary framing}}
-This project aims to enhance student and developer wellness by reducing cognitive exhaustion and screen-induced burnout. While workplace fatigue is a widespread behavioral issue, the immediate engineering objective is to translate \emph{passive fatigue detection and recovery scheduling} into a measurable, lightweight, and deployable software pipeline.
+This project aims to enable earlier, non-invasive detection of stress in academic and professional settings, reducing reliance on manual surveys and delayed clinical consultation that currently allow intervention to lag behind onset. While multi-modal stress detection is broadly applicable to corporate wellness programs and clinical screening, the immediate engineering objective is to translate facial expression, voice pattern, and self-reported survey signals into a measurable, lightweight, and deployable web classification pipeline.
 
 \section{Time-to-value %
 \BvrHint{\ldots primary heuristic}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item We will deliver meaningful increments quickly by prototyping the core session-logging and fatigue-scoring pipeline within a 2-week iteration window.
-    \item We will prioritize fast feedback over custom model research by using pre-trained feature extractors and weekly CI-driven automated test releases.
-    \item Success is defined by what can be scored, logged, and visualized in the first iteration, and incrementally expanded with multimodal inputs thereafter.
+    \item We will deliver meaningful increments quickly by following an Agile process with iterative phases for design, development, integration, and testing rather than a single monolithic build.
+    \item We will prioritize fast feedback over complex infrastructure by using GitHub-based version control, code reviews, and CI/CD practices to catch defects early and keep each stage independently testable.
+    \item Success is defined by what can be captured, classified, and displayed in the first iteration (survey-based classification and a basic web dashboard), incrementally expanded to include browser-based facial and voice modalities and the chatbot.
 \end{itemize}
 
 \section{Problem Statement}
-University students and knowledge workers experience severe productivity drops and digital fatigue during prolonged, uninterrupted screen sessions. Common pain points include:
+Students, employees in high-stress industries, and mental health practitioners currently lack a continuous, low-friction way to track stress levels. Existing assessment approaches depend on infrequent self-reporting or in-person consultation, which delays recognition of escalating stress and limits opportunities for early intervention. Common pain points include:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Delayed self-awareness:} users rarely recognize cognitive saturation until headaches, attention lapses, or coding blunders occur.
-    \item \textbf{Intrusive monitoring:} existing surveillance tools record invasive video feeds or keystrokes, raising severe privacy concerns.
-    \item \textbf{Lack of actionable recovery loops:} traditional wellness tools provide static reminders rather than contextual break recommendations based on session strain.
-    \item \textbf{No verifiable audit of session load:} users cannot correlate long study/work sprints with declining focus over time.
+    \item \textbf{Manual and infrequent assessment:} stress is typically self-reported through periodic surveys, missing day-to-day fluctuations.
+    \item \textbf{Delayed intervention:} practitioners and individuals often become aware of elevated stress only after productivity or wellbeing has already been affected.
+    \item \textbf{Single-signal reliance:} most existing tools use one input type (usually a questionnaire), reducing classification robustness.
+    \item \textbf{No integrated guidance channel:} users lack an accessible, always-available resource for immediate general wellness questions.
 \end{itemize}
 
-\textbf{Why this matters now (contextual relevance):} In remote learning and intensive engineering environments, a non-invasive, privacy-preserving fatigue sentinel prevents burnout and sustains long-term academic productivity.
+\textbf{Why this matters now (contextual relevance):} In academic and workplace environments with high cognitive load and limited access to counselling resources, an automated, multi-modal monitoring platform can support earlier intervention, reduce the burden of manual evaluation, and make wellness guidance more accessible.
 
 \section{Proposed Solution %
 \BvrHint{\ldots Software Proposition}}
 \subsection{Overview}
-Build a \textbf{web-based} ``Cognitive Fatigue Sentinel'' platform with the following components:
+Build a \textbf{web-based} ``Stress Detection Platform'' with the following components:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Client-side telemetry collector:} processes lightweight, on-device metrics (eye blink rate/EAR via webcam and typing cadence rhythm) without uploading raw media to servers.
-    \item \textbf{Self-reported strain pulse:} quick 2-click micro-survey capturing subjective focus level.
-    \item \textbf{Deterministic composite scoring engine:} combines real-time session duration, micro-survey inputs, and edge blink metrics into an actionable Fatigue Index ($0$--$100$).
-    \item \textbf{Live wellness dashboard:} displays current strain tier (Optimal, Moderate, Fatigued) and smart recovery countdowns.
-    \item \textbf{Smart intervention trigger:} automated break prompts and micro-recovery exercises dispatched upon threshold violations.
+    \item \textbf{User-facing web application:} responsive web portal supporting in-browser webcam facial capture, microphone audio recording, a stress survey form, and a results dashboard.
+    \item \textbf{Machine learning backend:} CNN-based processing for facial and audio inputs, an MLP for survey data, and a fusion model that combines all three into a single classification.
+    \item \textbf{Medical-domain chatbot:} a BERT-based NLP component scoped to health and stress-management queries.
+    \item \textbf{Database and APIs:} secure storage and processing of user data, model outputs, and chatbot logs.
 \end{itemize}
 
 \subsection{Core workflow}
 \begin{enumerate}[leftmargin=0.7cm]
-    \item User starts a work/study session via the web dashboard.
-    \item Browser extracts local blink rate telemetry via client-side libraries and logs session interval metrics.
-    \item Ingestion API consumes structured numerical telemetry payloads (no raw video or text stored).
-    \item Rule engine computes the composite Fatigue Index and flags threshold breaches.
-    \item Dashboard alerts user when fatigue levels exceed safe thresholds and recommends specific recovery intervals.
+    \item User submits input via the web app: a facial snapshot via webcam, a short audio sample via microphone, and/or a survey response.
+    \item Backend preprocesses each modality (e.g., face landmark extraction, audio feature extraction via MFCCs, survey encoding) and validates input quality.
+    \item The fusion model combines modality-level outputs into a single stress classification: Low, Medium, or High.
+    \item Web dashboard updates with the classification and history; if a query is raised, the chatbot responds with general wellness guidance.
 \end{enumerate}
 
-\subsection{Operational constraints for an educational, campus setting}
+\subsection{Operational constraints for a resource-constrained development setting}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Ensure zero raw video or keystroke content leaves the user's local browser to preserve complete privacy.
-    \item Avoid building deep neural networks from scratch; rely on mature client-side vision primitives and deterministic scoring heuristics.
-    \item Design for low CPU utilization so background monitoring does not degrade system performance.
+    \item Keep the web application lightweight and responsive across standard desktop and mobile browsers.
+    \item Budget limits access to advanced GPU infrastructure, so model choices must remain trainable and deployable within standard cloud CPU/free-tier constraints.
+    \item Design for ethical use: informed consent, anonymized datasets, and encrypted storage for sensitive biometric and health data.
 \end{itemize}
 
 \section{Solution Approach %
 \BvrHint{\ldots Engineering focus}}
-This is an engineering course project, so we focus on data pipelines, client-side efficiency, and automated testing rather than novel algorithmic research.
+This is an engineering-oriented software project, so the focus is on a reliable multi-modal pipeline, data integrity, and integration discipline rather than on advancing new machine learning research.
 
-\subsection{Fatigue scoring heuristics %
-\BvrHint{\ldots non-research}}
-Fatigue evaluation will be deterministic and rule-weighted:
+\subsection{Classification pipeline %
+\BvrHint{\ldots applied ML, not research}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Use pre-trained client-side landmark extractors (e.g., MediaPipe FaceMesh) to derive Eye Aspect Ratio (EAR) locally.
-    \item Calculate weighted score vectors across session duration, blink frequency drop, and self-reported focus markers.
-    \item Maintain deterministic boundary thresholds (e.g., Score $> 75 \rightarrow$ High Fatigue) for predictable testing.
+    \item Standardize inputs across modalities (image, audio, survey) with defined preprocessing and validation steps for each.
+    \item Use established architectures --- CNNs for image/audio and an MLP for survey data --- combined through a decision-level fusion layer, rather than designing new model families.
+    \item Classify each session into one of three defined stress levels (Low, Medium, High) with a consistent, auditable output format.
 \end{itemize}
 
-\subsection{Web architecture %
+\subsection{System architecture %
 \BvrHint{\ldots web-based solution}}
-A standard 3-tier web architecture:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} responsive single-page web app with client-side vision extraction and live charting.
-    \item \textbf{Backend API:} REST endpoints for ingesting numerical telemetry records, user sessions, and threshold alerts.
-    \item \textbf{Database:} relational database (SQLite/PostgreSQL) storing session timestamps, fatigue scores, and recovery logs.
+    \item \textbf{Frontend:} Responsive web client (React.js / HTML5) utilizing browser WebRTC and Web Audio APIs for media capture.
+    \item \textbf{Backend API:} Python (FastAPI / Flask) serving inference endpoints for face, audio, and survey data processing.
+    \item \textbf{Database \& Storage:} Firebase / PostgreSQL for authentication, session logs, anonymized scores, and trend history.
+    \item \textbf{Model layer:} TensorFlow/Keras CNN and MLP inference models combined via a fusion layer.
+    \item \textbf{NLP / Chatbot:} Lightweight BERT-based conversational model serving scoped stress-management and wellness guidance.
+    \item \textbf{Deployment:} Containerized deployment (Docker) on cloud hosting (AWS/GCP/Render) with encryption protocols for data at rest and in transit.
 \end{itemize}
 
 \subsection{CI/CD and fast delivery enabler}
 CI/CD will be used to:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Automatically run unit test suites on score-weighting algorithms and schema validation on every git push.
-    \item Verify that invalid or negative telemetry values are rejected cleanly.
-    \item Deploy verified builds to cloud staging environments automatically.
+    \item Automatically run tests on preprocessing, model interfaces, and API contracts on every push.
+    \item Catch integration regressions (e.g., malformed inputs, schema mismatches) before merging to the main branch.
+    \item Automate packaging and staged deployment as each deliverable (D1--D6) is completed.
 \end{itemize}
 
 \section{Evaluation Criterion %
 \BvrHint{\ldots measurable and attributable}}
-We define success using measurable metrics tied to the core workflow.
+We define success using measurable metrics tied to the core classification and chatbot workflows.
 
 \subsection{Primary evaluation metric}
-\textbf{Intervention Trigger Latency (ITL):} time between telemetry ingestion crossing a fatigue threshold and the dispatch of a recovery notification.
+\textbf{Stress Classification Accuracy:} the proportion of test-set sessions correctly classified into Low, Medium, or High stress.
 \begin{itemize}[leftmargin=0.7cm]
-    \item Target: median ITL $\le$ 1.5 seconds during active monitoring sessions.
-    \item Attribution: measured from payload receipt timestamp to alert dispatch log in the database.
+    \item Target: at least 80\% accuracy on the held-out test dataset, with a stretch goal of 85\% reported in pilot testing.
+    \item Attribution: measured by comparing model output against labelled/self-reported ground truth on the test split.
 \end{itemize}
 
 \subsection{Secondary evaluation metrics}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Deterministic scoring accuracy:} 100\% pass rate on edge-case test suites (verifying correct state transitions at boundary scores 50, 75, 90).
-    \item \textbf{Data efficiency:} telemetry payload sizes restricted to $< 2\text{ KB}$ per ping to maintain lightweight operation.
-    \item \textbf{Client execution overhead:} client-side feature extraction consuming $< 5\%$ average CPU on standard laptops.
-    \item \textbf{Pipeline reliability:} $\ge$ 99\% CI test pass rate prior to release.
+    \item \textbf{Chatbot relevance:} at least 90\% of chatbot responses rated as medically relevant in validation review.
+    \item \textbf{Response latency:} classification and chatbot response time under 3 seconds.
+    \item \textbf{Availability:} $\ge$ 99\% uptime for the deployed version.
+    \item \textbf{Data protection:} 100\% of stored data encrypted at rest and in transit, with datasets anonymized.
 \end{itemize}
 
 \subsection{Pilot validation plan %
 \BvrHint{\ldots high-level}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Run automated mock telemetry scripts simulating 2-hour continuous study sessions with escalating fatigue patterns.
-    \item Conduct user testing with 10 student volunteers across 1-hour study blocks to evaluate alert timeliness and UI clarity.
+    \item Onboard at least 30 users for initial testing across the three target personas.
+    \item Aim to reduce manual stress-evaluation time by at least 50\% compared to survey-only baselines.
+    \item Validate usability and clarity of the dashboard and chatbot with representative student, employee, and practitioner scenarios.
 \end{itemize}
 
 \section{Scalability %
 \BvrHint{\ldots with foresight}}
-The architecture is designed to scale across multiple users and institutions.
+The proposition is designed to scale systematically in both theoretical and practical dimensions.
 
 \begin{enumerate}[leftmargin=0.7cm]
-    \item \textbf{Scalable (theoretically):} The system handles high concurrent user loads by:
+    \item \textbf{Scalable (theoretically):} The system supports scaling to more users and institutions by:
     \begin{itemize}[leftmargin=0.7cm]
-        \item delegating all visual/computational extraction to client browsers,
-        \item keeping backend APIs stateless and lightweight (processing only numerical scores),
-        \item indexing database records on session IDs and timestamps for instant history querying.
+        \item decoupling the responsive web frontend from backend inference and chatbot services,
+        \item utilizing stateless REST APIs for inference orchestration,
+        \item keeping the fusion model and chatbot as independently deployable microservices.
     \end{itemize}
     
-    \item \textbf{Operationally deployable (practically):} The system runs reliably on common infrastructure:
+    \item \textbf{Operationally deployable (practically):} The system runs on standard, mature infrastructure:
     \begin{itemize}[leftmargin=0.7cm]
-        \item managed relational database,
-        \item lightweight containerized deployment (Docker),
-        \item automated GitHub Actions pipeline for continuous integration and testing.
+        \item cloud-hosted deployment (AWS/GCP/Render) with encryption protocols,
+        \item managed database backing for consistent execution and data syncing,
+        \item GitHub Actions-style CI pipeline for automated testing and continuous integration.
     \end{itemize}
 \end{enumerate}
+Planned future phases (out of current scope) include wearable sensor integration and multi-language chatbot support, both designed to layer onto the same architecture without redesigning the core pipeline.
 
 \section{Engine availability heuristic}
-A mature set of stable libraries is available to implement this without research delays:
+A mature set of software components is available to implement this without research bottlenecks:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Client-side vision primitives (MediaPipe / FaceMesh via JavaScript).
-    \item Backend REST API framework (FastAPI or Express.js).
-    \item Relational database engine (SQLite for dev, PostgreSQL for staging).
-    \item Dashboard charting engines (Chart.js / Recharts).
-    \item Test runner and CI engine (Pytest / Jest and GitHub Actions).
+    \item ML/data tooling: Python, TensorFlow/Keras, OpenCV, Librosa, Pandas.
+    \item Web frontend: React.js / modern HTML5/JS with WebRTC support.
+    \item Backend and storage: Python (FastAPI) and Firebase/PostgreSQL.
+    \item NLP: a BERT-based model for the medical-domain chatbot.
+    \item Deployment/hosting: AWS, GCP, or Render with Docker.
 \end{itemize}
-These mature tools enable the team to focus on input reliability, privacy guarantees, and UX rather than custom machine learning model training.
+These mature tools enable the team to focus on multi-modal integration, data privacy, and clear UX rather than low-level infrastructure development.
 
 \section{Project scope and deliverables %
 \BvrHint{\ldots iteration-friendly}}
-\subsection{Initial deliverable %
-\BvrHint{\ldots first iteration}}
+\subsection{Initial deliverables %
+\BvrHint{\ldots first iterations}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Telemetry ingestion endpoint (\texttt{POST /api/fatigue}) with strict schema validation
-    \item Deterministic scoring engine computing fatigue index from basic inputs (session duration + micro-survey)
-    \item Database schema storing user session records and calculated scores
-    \item Web dashboard displaying active session status with a Safe/Fatigued visual indicator
-    \item CI pipeline: automated linting and unit tests verifying score calculation logic
+    \item \textbf{D1:} Requirement analysis and dataset report.
+    \item \textbf{D2:} Preprocessing modules for image, audio, and survey inputs.
 \end{itemize}
 
 \subsection{Subsequent deliverables}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Client-side eye aspect ratio (EAR) integration via MediaPipe for passive blink tracking
-    \item Historical session analytics showing focus and fatigue trends over time
-    \item Interactive break scheduler with micro-recovery guidance prompts
-    \item Automated synthetic data generator for stress-testing pipeline edge cases
-    \item CSV/PDF session report export for personal habit tracking
+    \item \textbf{D3:} Trained CNN/MLP models for each modality.
+    \item \textbf{D4:} Multi-modal fusion integration and chatbot prototype.
+    \item \textbf{D5:} Complete MVP with survey/pilot reports.
+    \item \textbf{D6:} Final web deployment, documentation, and demo video.
+\end{itemize}
+
+\subsection{Scope of application}
+\begin{itemize}[leftmargin=0.7cm]
+    \item \textbf{In scope:} In-browser facial and voice input capture, survey integration, stress classification, chatbot responses, dashboard and history tracking.
+    \item \textbf{Out of scope (Phase 2/3):} Wearable sensor integration, multi-language chatbot support, and deep clinical diagnostic features.
+    \item \textbf{Assumptions and constraints:} Users have standard browser webcam/microphone access; use requires informed consent; budget limits access to advanced GPU infrastructure.
 \end{itemize}
 
 \section{Risks and mitigations}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{User privacy concerns:} guarantee that no video frames, images, or raw text are transmitted or stored; only derived numerical metrics are sent to the backend.
-    \item \textbf{Camera lighting sensitivity:} allow the system to gracefully fall back on session duration and survey inputs if optical conditions are poor.
-    \item \textbf{Alert fatigue:} introduce cooldown timers to prevent repeated notifications within short time windows.
-    \item \textbf{Evaluation measurement ambiguity:} use automated server timestamps to strictly measure alert response latencies.
+    \item \textbf{Sensitive biometric and health data:} encrypt data at rest and in transit, anonymize datasets, and require explicit user consent.
+    \item \textbf{Model accuracy and bias across demographics:} train and validate on a diverse dataset and report per-group performance, not only aggregate accuracy.
+    \item \textbf{Hardware dependency (webcam/microphone quality):} support a survey-only fallback mode when facial or audio capture is unavailable or unreliable.
+    \item \textbf{Chatbot giving inaccurate or unsafe medical guidance:} scope responses to general wellness information, validate against medical-relevance criteria, and include clear disclaimers directing users to professional care.
+    \item \textbf{Scope creep:} maintain a strict separation between the core detection/dashboard workflow and optional features deferred to later phases.
 \end{itemize}
 
 \section{Summary}
-This project proposes MindPulse, a privacy-preserving web platform designed to detect cognitive fatigue and recommend timely recovery breaks during extended computer work. It meets the course criteria by delivering a functional 2-week MVP, using CI automation to guarantee calculation correctness, and leveraging mature client-side engines to bypass model training bottlenecks. It focuses on engineering reliability, data privacy, and measurable intervention latency.
+This project proposes a lightweight, web-based multi-modal platform that combines facial, voice, and survey signals to classify stress as Low, Medium, or High, paired with a medical-domain chatbot for general wellness guidance. It follows an Agile methodology with staged deliverables (D1--D6), uses CI/CD to keep the multi-modal pipeline reliable, and tracks measurable outcomes --- classification accuracy, chatbot relevance, response latency, and pilot onboarding --- while keeping data privacy and consent central to the design.
 
 \end{document}
